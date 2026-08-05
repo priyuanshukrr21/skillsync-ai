@@ -32,7 +32,7 @@ function ChatBox() {
       style={{
         maxWidth: "700px",
         margin: "40px auto",
-        background: "#1e293b",
+        background: "linear-gradient(180deg,#0b1220,#102135)",
         padding: "20px",
         borderRadius: "15px",
         color: "white",
@@ -44,7 +44,7 @@ function ChatBox() {
         style={{
           height: "400px",
           overflowY: "auto",
-          background: "#0f172a",
+          background: "rgba(255,255,255,0.02)",
           padding: "15px",
           borderRadius: "10px",
           marginBottom: "15px",
@@ -68,7 +68,7 @@ function ChatBox() {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         style={{
-          width: "75%",
+          width: "72%",
           padding: "10px",
           borderRadius: "8px",
           border: "none",

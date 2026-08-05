@@ -109,3 +109,26 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* Small UI utility styles used across the app */
+.primary-btn {
+  background: linear-gradient(90deg,#7c3aed,#06b6d4);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tag{
+  background: rgba(0,0,0,0.05);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  #root { padding: 0 12px }
+  .primary-btn { width: 100% }
+}
