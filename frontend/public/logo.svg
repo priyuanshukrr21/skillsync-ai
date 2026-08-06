@@ -1,0 +1,17 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#eef2ff" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="32" fill="#0f172a" />
+  <path d="M46 46c14-6 34-12 58 0 20 10 28 32 18 54-8 16-28 26-48 26-18 0-34-10-40-22-6-12-4-22 4-28 8-6 20-8 30-4 8 3 16 10 18 20" fill="url(#g)" opacity="0.95" />
+  <path d="M46 46c8 20 22 32 40 36 14 3 28 2 38-8 10-10 12-24 6-36-6-12-18-18-32-18-16 0-32 8-44 18z" fill="url(#g2)" opacity="0.88" />
+  <path d="M54 102c14 6 34 12 58 0 20-10 28-32 18-54-8-16-28-26-48-26-18 0-34 10-40 22-6 12-4 22 4 28 8 6 20 8 30 4 8-3 16-10 18-20" fill="#ffffff" opacity="0.18" />
+  <text x="80" y="142" text-anchor="middle" font-family="Inter, sans-serif" font-size="20" font-weight="700" fill="#f8fafc">SkillSync AI</text>
+</svg>

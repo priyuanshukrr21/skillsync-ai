@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import auth from "../services/auth";
 
 function Login() {
@@ -19,7 +19,14 @@ function Login() {
     setLoading(true);
     try {
       const user = await auth.login(email.trim(), password);
-      localStorage.setItem("skillSyncUser", JSON.stringify(user));
+      const normalized = {
+        ...user,
+        name: user.name || user.email?.split("@")[0] || "User",
+      };
+      localStorage.setItem("skillSyncUser", JSON.stringify(normalized));
+      if (!localStorage.getItem("skillSyncPrefs")) {
+        localStorage.setItem("skillSyncPrefs", JSON.stringify({ theme: "light", language: "english" }));
+      }
       navigate("/");
     } catch (err) {
       setError(err?.message || "Login failed");
@@ -34,58 +41,94 @@ function Login() {
   }
 
   return (
-    <div style={{ padding: 32, minHeight: "60vh" }}>
-      <h2>Login</h2>
-
-      <form onSubmit={handleSubmit} style={{ maxWidth: 420, marginTop: 16 }}>
-        {error && (
-          <div style={{ marginBottom: 12, color: "#fee2e2", background: "#2b0608", padding: 10, borderRadius: 8 }} role="alert">
-            {error}
+    <div className="auth-page">
+      <div className="auth-card">
+        <aside className="auth-side">
+          <div className="brand-mark">
+            <img src="/logo.svg" alt="SkillSync logo" />
+            <div>
+              <p>SkillSync</p>
+              <strong>AI Career Assistant</strong>
+            </div>
           </div>
-        )}
 
-        <div style={{ marginBottom: 12, textAlign: "left" }}>
-          <label style={{ display: "block", marginBottom: 6 }}>Email</label>
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="you@company.com"
-            style={{ width: "100%", padding: 10, marginTop: 6, borderRadius: 8, border: "1px solid rgba(0,0,0,0.08)" }}
-          />
-        </div>
+          <h1>Welcome back</h1>
+          <p>Sign in to access your AI career assistant, resume insights, and job recommendations.</p>
 
-        <div style={{ marginBottom: 12, textAlign: "left" }}>
-          <label style={{ display: "block", marginBottom: 6 }}>Password</label>
-          <div style={{ display: "flex", gap: 8 }}>
-            <input
-              type={showPwd ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Your password"
-              style={{ flex: 1, padding: 10, marginTop: 6, borderRadius: 8, border: "1px solid rgba(0,0,0,0.08)" }}
-            />
-            <button type="button" onClick={() => setShowPwd((s) => !s)} style={{ padding: 10, borderRadius: 8 }}>
-              {showPwd ? "Hide" : "Show"}
-            </button>
+          <ul>
+            <li>Smart resume optimization</li>
+            <li>AI-driven job matching</li>
+            <li>Personalized career suggestions</li>
+          </ul>
+        </aside>
+
+        <section className="auth-form-panel">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, marginBottom: 32, flexWrap: "wrap" }}>
+            <div>
+              <h2>Sign in</h2>
+              <p>Use your email and password to continue.</p>
+            </div>
+            <img src="/logo.svg" alt="SkillSync mark" style={{ width: 42, height: 42 }} />
           </div>
-        </div>
 
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <button className="primary-btn" disabled={loading} style={{ opacity: loading ? 0.7 : 1 }}>
-            {loading ? "Signing in..." : "Sign in"}
-          </button>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            {error && <div className="auth-error" role="alert">{error}</div>}
 
-          <button type="button" onClick={fillDemo} style={{ background: "transparent", border: "none", color: "#6b7280", cursor: "pointer" }}>
-            Use demo
-          </button>
-        </div>
+            <div className="auth-field">
+              <label htmlFor="login-email">Email</label>
+              <input
+                id="login-email"
+                type="email"
+                className="auth-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="you@company.com"
+              />
+            </div>
 
-        <div style={{ marginTop: 12 }}>
-          <a href="#" onClick={(e)=>{e.preventDefault(); alert('Forgot password flow not implemented yet.')}} style={{ color: '#6b7280' }}>Forgot password?</a>
-        </div>
-      </form>
+            <div className="auth-field">
+              <label htmlFor="login-password">Password</label>
+              <div className="password-row">
+                <input
+                  id="login-password"
+                  type={showPwd ? "text" : "password"}
+                  className="auth-input"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="Enter your password"
+                />
+                <button type="button" className="password-toggle" onClick={() => setShowPwd((s) => !s)}>
+                  {showPwd ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            <div className="auth-actions">
+              <button className="primary-btn" disabled={loading} style={{ opacity: loading ? 0.8 : 1 }}>
+                {loading ? "Signing in..." : "Sign in"}
+              </button>
+              <button type="button" className="secondary-btn" onClick={fillDemo}>
+                Use demo
+              </button>
+            </div>
+
+            <div className="auth-note">
+              <Link to="#" onClick={(e) => e.preventDefault()} className="auth-link">
+                Forgot password?
+              </Link>
+            </div>
+          </form>
+
+          <div className="auth-footer">
+            <span>Don't have an account?</span>{" "}
+            <Link to="/signup" className="auth-link">
+              Create one
+            </Link>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
