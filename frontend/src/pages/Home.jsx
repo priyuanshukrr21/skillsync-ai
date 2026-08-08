@@ -1,64 +1,88 @@
-import { useNavigate } from "react-router-dom";
-import FeatureCard from "../components/FeatureCard";
+import Navbar from "../components/Navbar";
 
 function Home() {
-  const navigate = useNavigate();
-
   return (
-    <div
-      style={{
-        background: "linear-gradient(180deg,#0f172a 0%, #071020 100%)",
-        color: "white",
-        minHeight: "70vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "60px 20px",
-      }}
-    >
-      <h1 style={{ marginTop: 8 }}>🚀 SkillSync AI</h1>
-      <p style={{ opacity: 0.85, marginTop: 6 }}>Your AI Career Assistant</p>
-
-      <div style={{ marginTop: 20 }}>
-        <button
-          onClick={() => navigate("/chat")}
-          className="primary-btn"
-        >
-          Start AI Chat
-        </button>
-      </div>
+    <>
+      <Navbar />
 
       <div
         style={{
+          background: "#0f172a",
+          color: "white",
+          minHeight: "100vh",
           display: "flex",
-          gap: "20px",
-          marginTop: "48px",
-          flexWrap: "wrap",
           justifyContent: "center",
+          alignItems: "center",
+          padding: "40px 20px",
         }}
       >
-        <FeatureCard
-          icon="🤖"
-          title="AI Chat"
-          desc="Talk with your personal AI career assistant."
-          onClick={() => navigate("/chat")}
-        />
+        <div
+          style={{
+            width: "100%",
+            maxWidth: "1000px",
+            textAlign: "center",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "48px",
+              marginBottom: "20px",
+            }}
+          >
+            Welcome to SkillSync AI 🤖
+          </h1>
 
-        <FeatureCard
-          icon="📄"
-          title="Resume Analysis"
-          desc="Get AI feedback on your resume instantly."
-          onClick={() => navigate("/resume-analysis")}
-        />
+          <p
+            style={{
+              fontSize: "20px",
+              color: "#cbd5e1",
+              marginBottom: "30px",
+            }}
+          >
+            Your AI-powered career assistant
+          </p>
 
-        <FeatureCard
-          icon="💼"
-          title="Job Recommendations"
-          desc="Find jobs based on your skills using AI."
-          onClick={() => navigate("/job-recommendations")}
-        />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "20px",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              onClick={() => (window.location.href = "/chat")}
+              style={{
+                padding: "14px 28px",
+                background: "#6366f1",
+                color: "white",
+                border: "none",
+                borderRadius: "10px",
+                fontSize: "16px",
+                cursor: "pointer",
+              }}
+            >
+              🤖 Chat with AI
+            </button>
+
+            <button
+              onClick={() => (window.location.href = "/resume")}
+              style={{
+                padding: "14px 28px",
+                background: "#334155",
+                color: "white",
+                border: "none",
+                borderRadius: "10px",
+                fontSize: "16px",
+                cursor: "pointer",
+              }}
+            >
+              📄 Analyze Resume
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

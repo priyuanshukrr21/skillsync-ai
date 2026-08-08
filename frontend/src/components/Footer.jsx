@@ -1,11 +1,18 @@
-import React from "react";
-
-function Footer(){
-  return (
-    <footer style={{ padding: '22px 32px', borderTop: '1px solid rgba(0,0,0,0.06)', textAlign: 'center', marginTop: 32 }}>
-      <div style={{ opacity: 0.8 }}>© {new Date().getFullYear()} SkillSync AI — Built by Priyanshu Kumar</div>
-    </footer>
-  )
+function Footer() {
+	return (
+		<footer
+			style={{
+				width: "100%",
+				padding: "20px 40px",
+				textAlign: "center",
+				background: "rgba(15,23,42,0.9)",
+				color: "#cbd5e1",
+				marginTop: "40px",
+			}}
+		>
+			<div>© {new Date().getFullYear()} SkillSync AI — Built with ❤️</div>
+		</footer>
+	);
 }
 
 export default Footer;

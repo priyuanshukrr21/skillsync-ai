@@ -1,44 +1,51 @@
-import React from "react";
-import FeatureCard from "../components/FeatureCard";
+import { useState } from "react";
+import axios from "axios";
 
 function JobRecommendations() {
-  const exampleJobs = [
-    { title: "Frontend Engineer", company: "Acme Inc.", tags: ["React","JavaScript"] },
-    { title: "Data Analyst", company: "DataWorks", tags: ["SQL","Python"] },
-    { title: "ML Engineer", company: "ModelFlow", tags: ["Python","PyTorch"] },
-  ];
+	const [skills, setSkills] = useState("");
+	const [jobs, setJobs] = useState(null);
 
-  return (
-    <div style={{ padding: 32, minHeight: '60vh' }}>
-      <h2>Job Recommendations</h2>
-      <p style={{ opacity: 0.85 }}>Personalized openings based on your skills.</p>
+	const getRecommendations = async () => {
+		try {
+			const message = `Recommend jobs for these skills: ${skills}`;
+			const res = await axios.post("/chat", { message });
+			// Backend returns `{ reply: ... }` so store the reply string as a single-item list
+			const reply = res.data?.reply ?? res.data;
+			setJobs([ { title: reply, company: "SkillSync AI" } ]);
+		} catch (err) {
+			console.error(err);
+			alert("Failed to fetch recommendations (backend may not be running).");
+		}
+	};
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 16, marginTop: 20 }}>
-        {exampleJobs.map((job, idx) => (
-          <div key={idx} style={{ padding: 18, borderRadius: 12, background: 'rgba(0,0,0,0.03)' }}>
-            <h3 style={{ margin: 0 }}>{job.title}</h3>
-            <p style={{ margin: '6px 0 12px', opacity: 0.8 }}>{job.company}</p>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {job.tags.map((t) => (
-                <span key={t} className="tag">{t}</span>
-              ))}
-            </div>
-            <div style={{ marginTop: 12 }}>
-              <button className="primary-btn">View</button>
-            </div>
-          </div>
-        ))}
-      </div>
+	return (
+		<div style={{ padding: 24, maxWidth: 900, margin: "96px auto" }}>
+			<h1>Job Recommendations</h1>
+			<p>Enter a comma-separated list of your skills and click Get Recommendations.</p>
+			<div style={{ display: "flex", gap: 12, marginTop: 12 }}>
+				<input
+					value={skills}
+					onChange={(e) => setSkills(e.target.value)}
+					placeholder="e.g. React, Python, AWS"
+					style={{ flex: 1, padding: 10, borderRadius: 6 }}
+				/>
 
-      <div style={{ marginTop: 32 }}>
-        <FeatureCard
-          icon="🔍"
-          title="Improve matches"
-          desc="Add your skills to get more relevant job suggestions."
-        />
-      </div>
-    </div>
-  );
+				<button onClick={getRecommendations} style={{ padding: 10, borderRadius: 6 }}>
+					Get Recommendations
+				</button>
+			</div>
+
+			{jobs && (
+				<ul style={{ marginTop: 20 }}>
+					{jobs.map((j, i) => (
+						<li key={i} style={{ marginBottom: 8 }}>
+							<strong>{j.title}</strong> — {j.company}
+						</li>
+					))}
+				</ul>
+			)}
+		</div>
+	);
 }
 
 export default JobRecommendations;
