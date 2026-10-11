@@ -1,49 +1,140 @@
-import { useState } from "react";
-import axios from "axios";
 
-function ResumeAnalysis() {
-	const [file, setFile] = useState(null);
-	const [result, setResult] = useState(null);
+import { useRef, useState } from "react";
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		if (!file) return alert("Please choose a resume file first.");
+export default function ResumeAnalysis() {
+  const fileRef = useRef(null);
+  const [file, setFile] = useState(null);
+  const [message, setMessage] = useState("");
 
-		// The backend currently exposes a `/chat` endpoint. Send a descriptive message
-		// to the chat endpoint as a temporary placeholder for resume analysis.
-		try {
-			const message = `Please analyze the resume file named: ${file.name}`;
-			const res = await axios.post("/chat", { message });
-			setResult(res.data.reply || res.data);
-		} catch (err) {
-			console.error(err);
-			alert("Analysis failed (backend may not be running).");
-		}
-	};
+  function handleFile(selectedFile) {
+    setMessage("");
 
-	return (
-		<div style={{ padding: 24, maxWidth: 900, margin: "96px auto" }}>
-			<h1>Resume Analysis</h1>
-			<form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
-				<input
-					type="file"
-					accept=".pdf,.doc,.docx"
-					onChange={(e) => setFile(e.target.files[0])}
-				/>
+    if (!selectedFile) return;
 
-				<button type="submit" style={{ padding: 10, borderRadius: 6 }}>
-					Analyze Resume
-				</button>
-			</form>
+    const extension = selectedFile.name.split(".").pop().toLowerCase();
+    const allowed = ["pdf", "docx"];
 
-			{result && (
-				<div style={{ marginTop: 20 }}>
-					<h3>Analysis Result</h3>
-					<pre style={{ whiteSpace: "pre-wrap" }}>{JSON.stringify(result, null, 2)}</pre>
-				</div>
-			)}
-		</div>
-	);
+    if (!allowed.includes(extension)) {
+      setFile(null);
+      setMessage("Please upload a PDF or DOCX file.");
+      return;
+    }
+
+    if (selectedFile.size > 10 * 1024 * 1024) {
+      setFile(null);
+      setMessage("File size must be 10 MB or less.");
+      return;
+    }
+
+    setFile(selectedFile);
+  }
+
+  function handleAnalyze() {
+    if (!file) {
+      setMessage("Please choose your resume first.");
+      return;
+    }
+
+    setMessage(
+      "Resume selected successfully. Connect the backend to generate your actual analysis."
+    );
+  }
+
+  return (
+    <>
+      <header className="app-header">
+        <div className="brand">
+          <div className="brand-icon">🚀</div>
+          <div>
+            <h1>SkillSync <span>AI</span></h1>
+            <p>Career Intelligence</p>
+          </div>
+        </div>
+        <span className="muted">Resume Analyzer</span>
+      </header>
+
+      <main className="resume-page">
+        <section className="resume-card">
+          <div className="brand-icon">📄</div>
+
+          <h2>Upload Your Resume</h2>
+          <p>
+            Upload your PDF or DOCX resume and prepare for your next career move.
+          </p>
+
+          <div
+            className="upload-zone"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              handleFile(e.dataTransfer.files[0]);
+            }}
+          >
+            <div className="upload-icon">☁️</div>
+
+            <p>
+              <strong>Drag and drop your resume here</strong>
+            </p>
+            <p className="muted">or choose a file from your computer</p>
+
+            <input
+              ref={fileRef}
+              className="file-input"
+              type="file"
+              accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              onChange={(e) => handleFile(e.target.files[0])}
+            />
+
+            <button
+              type="button"
+              className="choose-btn"
+              onClick={() => fileRef.current?.click()}
+            >
+              Choose Resume
+            </button>
+
+            <span className="upload-help">
+              PDF or DOCX · Maximum size 10 MB
+            </span>
+          </div>
+
+          {file && (
+            <div className="status-message">
+              Selected: {file.name} · {(file.size / 1024).toFixed(1)} KB
+              <button
+                type="button"
+                onClick={() => {
+                  setFile(null);
+                  setMessage("");
+                  if (fileRef.current) fileRef.current.value = "";
+                }}
+                style={{
+                  float: "right",
+                  border: 0,
+                  background: "transparent",
+                  color: "#c4b7ff"
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          )}
+
+          <button
+            className="primary-btn"
+            type="button"
+            onClick={handleAnalyze}
+          >
+            ✨ Analyze Resume →
+          </button>
+
+          {message && (
+            <div className="status-message" role="status">
+              {message}
+            </div>
+          )}
+        </section>
+      </main>
+    </>
+  );
 }
-
-export default ResumeAnalysis;
